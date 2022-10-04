@@ -1,3 +1,6 @@
+from weakref import ref
+
+
 def bablsort(lis):
     if len(lis) < 2:
         return(lis)
@@ -45,15 +48,22 @@ def insertsort(lis):
 
 def fastsort(lis):
     if len(lis) < 2:
+        print(lis)
         return(lis)
     ref_num = len(lis) // 2
     for el in lis[:ref_num] + lis[ref_num:]:
-        if el >= lis[ref_num]:
+        if el >= lis[ref_num] and lis.index(el) < ref_num:
             lis.append(lis.pop(lis.index(el)))
-        else:
+            ref_num -= 1
+        elif lis.index(el) > ref_num:
             lis.insert(-1, lis.pop(lis.index(el)))
+            ref_num += 1
+        if ref_num == len(lis) - 1 or ref_num == 0:
+            break
     if len(lis) == 2:
+        print(lis)
         return lis
+    print(lis)
     return fastsort(lis[:ref_num]) + [lis[ref_num]] + fastsort(lis[ref_num + 1:])
 
-print(fastsort([1, 2, -10, 7, 0, 100]))
+print(fastsort([1, 2, -10, 7, 0, 100, 10]))
