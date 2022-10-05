@@ -14,12 +14,11 @@ class ziplist:
     def __str__(self):
         return str(self.uncompress())
     def __repr__(self):
-        return f'Compresse: {bool(self.zipedlis)}, Compressed List: {self.zipedlis}, Uncompressed List: {self.lis}'
+        return f'Compresse: {bool(self.zipedlis)}, Compressed List: {self.zipedlis}, Uncompressed List: {self.uncompress()}'
     def compress(self):
         for el in set(self.lis):
             if self.lis.count(el) > 1:
                 self.repeats.append(el)
-        print(self.repeats)
         for el in self.lis:
             if el in self.repeats:
                 self.zipedlis.append(str(self.repeats.index(el)))
