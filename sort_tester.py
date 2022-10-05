@@ -12,15 +12,15 @@ def test_sort(func, repeats=10, lens=[1000]):
         sorted_list = [-10, 0, 10]
         for i in range(random.choice(lens) - 3):
             sorted_list.append(random.randint(-10000, 10000))
-        now = datetime.datetime.now()
         random.shuffle(sorted_list)
-        print(sorted_list)
-        after_sort = func(sorted_list)
+        sor = sorted_list[:]
+        now = datetime.datetime.now()
+        after_sort = func(sor)
         after = datetime.datetime.now()
         if after_sort == sorted(sorted_list):
             print(f'Список на {len(sorted_list)} элеменотов отсортирован за {after - now}  ВЕРНО!')
         else:
-            print(f'Список на {len(sorted_list)} элеменотов отсортирован за {after - now}  НЕВЕРНО!\nИсходный список: {sorted_list}\nВыходной Список: {after_sort}\nСортированный: {sorted(sorted_list)}')
+            print(f'Список на {len(sorted_list)} элеменотов отсортирован за {after - now}  НЕВЕРНО!\nИсходный список: {sorted_list}\nВыходной Список: {after_sort}\nСортированный:   {sorted(sorted_list)}')
             flag = False
         print('\n')
     if flag:
@@ -43,4 +43,4 @@ def fastsort(lis):
 
 # test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
 
-test_sort(fastsort, repeats=1, lens=[11])
+test_sort(fastsort, repeats=10, lens=[1000])
