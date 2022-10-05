@@ -50,12 +50,9 @@ def fastsort(lis):
     if len(lis) < 2:
         return(lis)
     ref_el = lis.pop(len(lis) // 2)
-    new_lis = []
-    for i in range(len(lis)):
-        if lis[i] < ref_el:
-            new_lis.append(lis[i])
+    new_lis = [lis[i] for i in range(len(lis)) if lis[i] < ref_el]
     lis = [el for el in lis if not el in new_lis]
     return fastsort(new_lis) + [ref_el] + fastsort(lis)
-    
+
 
 print(fastsort([1, 2, -10, 7, 0, 100, 10]))
