@@ -1,7 +1,7 @@
 import random
 import datetime
 
-def test_sorf(func, repeats=10, lens=[1000]):
+def test_sort(func, repeats=10, lens=[1000]):
     print('Простейшие тесты:')
     print(f'При {[]}  ----  {func([])}')
     print(f'При {[1]}  ----  {func([1])}')
@@ -39,4 +39,6 @@ def insertsort(lis):
     return new_list
 # Функция сортировки
 
-test_sorf(insertsort)
+# test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
+
+test_sort(insertsort)
