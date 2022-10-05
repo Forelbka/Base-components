@@ -58,5 +58,4 @@ def fastsort(lis):
     return fastsort(new_lis) + [ref_el] + fastsort(lis)
     
 
-
 print(fastsort([1, 2, -10, 7, 0, 100, 10]))
