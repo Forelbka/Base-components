@@ -1,6 +1,8 @@
 import random
 import datetime
 
+from sorts import insertsort
+
 def test_sort(func, repeats=10, lens=[1000]):
     print('Простейшие тесты:')
     print(f'При {[]}  ----  {func([])}')
@@ -29,18 +31,16 @@ def test_sort(func, repeats=10, lens=[1000]):
         print('Крупные тесты не верны')
 
 # Функция сортировки
-def fastsort(lis):
-    if len(lis) < 2:
-        return(lis)
-    ref_el = lis.pop(len(lis) // 2)
-    new_lis = []
+def choiseSort(lis):
     for i in range(len(lis)):
-        if lis[i] < ref_el:
-            new_lis.append(lis[i])
-    lis = [el for el in lis if not el in new_lis]
-    return fastsort(new_lis) + [ref_el] + fastsort(lis)
+        minim = i
+        for j in range(i, len(lis)):
+            if lis[j] < lis[minim]:
+                minim = j
+        lis[i], lis[minim] = lis[minim], lis[i]
+    return lis
 # Функция сортировки
 
 # test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
 
-test_sort(fastsort, repeats=10, lens=[1000])
+test_sort(choiseSort, repeats=10, lens=[1000])
