@@ -1,4 +1,5 @@
 import random
+import sys
 
 class ziplist:
     def __init__(self, lis):
@@ -59,7 +60,9 @@ class ziplist:
                 self.lis.append(el)
         return [self.lis.pop(0) for _ in range(len(self.lis))]
 
-for i in range(100):
-    b = [random.randint(-10, 10) for _ in range(100)]
-    a = ziplist(b[:])
-    print(str(a) == str(b))
+
+b = [random.randint(-10, 10) for _ in range(500)]
+a = ziplist(b[:])
+print(str(a) == str(b))
+print(sys.getsizeof(a))
+print(sys.getsizeof(b))
