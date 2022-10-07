@@ -61,8 +61,8 @@ class ziplist:
         return [self.lis.pop(0) for _ in range(len(self.lis))]
 
 
-b = [random.randint(-10, 10) for _ in range(500)]
+b = [random.randint(0, 100) for _ in range(250)]
 a = ziplist(b[:])
 print(str(a) == str(b))
-print(sys.getsizeof(a))
+print(sys.getsizeof(a.zipedlis) + sys.getsizeof(a.repeats))
 print(sys.getsizeof(b))
