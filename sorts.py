@@ -54,5 +54,13 @@ def fastsort(lis):
     lis = [el for el in lis if not el in new_lis]
     return fastsort(new_lis) + [ref_el] + fastsort(lis)
 
+def choiseSort(lis):
+    for i in range(len(lis)):
+        minim = i
+        for j in range(i, len(lis)):
+            if lis[j] < lis[minim]:
+                minim = j
+        lis[i], lis[minim] = lis[minim], lis[i]
+    return lis
 
-print(fastsort([1, 2, -10, 7, 0, 100, 10, -100]))
+print(choiseSort([1, -10]))
