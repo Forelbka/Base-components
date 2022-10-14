@@ -33,21 +33,28 @@ class ziplist:
                 while combinations.count(combin) > 1:
                         combinations.pop(combinations.index(combin))
             m += 1
-        
-        for num, combin in enumerate(doubles):
+        l = []
+        for combin in doubles:
             a = 0
+            n = 0
             while a < len(self.lis) - 1:
                 if self.lis[a] == combin[0]:
-                    flag = True
-                    for j in range(len(combin)):
-                        if self.lis[a + j] != combin[j]:
-                            flag = False
-                    if flag:
-                        self.lis = self.lis[:a] + [str(num)] + self.lis[a + len(combin):]
-                    else:
-                        flag = True
-                        # doubles.pop(num)
+                    if self.lis[a : a + len(combin)] == combin:
+                        if combin in l:
+                            self.lis = self.lis[:a] + [str(l.index(combin))] + self.lis[a + len(combin):]
+                        else:
+                            self.lis = self.lis[:a] + [str(n)] + self.lis[a + len(combin):]
+                            l.append(combin)
+                            n += 1
                 a += 1
+        doubles = l
+        #print(doubles)
+        #print(l)
+        #li = [int(el) for el in self.zipedlis if type(el) == str]
+        #doubles = [doubles[i] for i in range(len(doubles)) if i in li]
+        # print(bs)
+        #print(doubles)
+        # print(self.lis)
         self.repeats = doubles
         self.zipedlis = self.lis
         self.lis = []
@@ -61,8 +68,13 @@ class ziplist:
         return [self.lis.pop(0) for _ in range(len(self.lis))]
 
 
-b = [random.randint(0, 100) for _ in range(250)]
+b = [random.randint(0, 20) for _ in range(50)]
 a = ziplist(b[:])
-print(str(a) == str(b))
+print(a.uncompress() == b)
+print(a)
+print(b)
+print(a.zipedlis)
+print(a.repeats)
+print([int(el) for el in a.zipedlis if type(el) == str])
 print(sys.getsizeof(a.zipedlis) + sys.getsizeof(a.repeats))
 print(sys.getsizeof(b))
