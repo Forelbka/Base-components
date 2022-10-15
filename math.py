@@ -20,29 +20,6 @@ class Function():
         self.step = 0
         self.b = 0
         self.c = 0
-    #     self.generate_func()
-    #
-    # def generate_func(self):
-    #     strin = self.string.split()
-    #     a = 1
-    #     step = 1
-    #     if len(strin) == 5:
-    #         if strin[0][:strin[0].find('x')]:
-    #             a = float(strin[0][:strin[0].find('x')])
-    #         step = float(strin[0][strin[0].find('^') + 1:])
-    #         b = float(strin[1] + strin[2][:-1])
-    #         c = float(strin[3] + strin[4])
-    #     else:
-    #         if strin[0][:strin[0].find('x')]:
-    #             b = float(strin[0][:strin[0].find('x')])
-    #         else:
-    #             b = 1
-    #         c = float(strin[1] + strin[2])
-    #         a = 0
-    #     self.a = a
-    #     self.step = step
-    #     self.b = b
-    #     self.c = c
 
     def get_func(self, x):
         strin = self.string.split()
