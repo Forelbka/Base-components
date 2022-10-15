@@ -1,16 +1,17 @@
+from symbol import del_stmt
 import tkinter as tk
-
-operatins = ['+', '-', '/', '^']
-window = tk.Tk()
-label = tk.Label(text="Формула")
-entr = tk.Entry()
-entr.pack()
-label.pack()
-
 from turtle import *
 
 y = min(screensize())
-y = 500
+#y = 500
+
+#operatins = ['+', '-', '/', '^']
+label = tk.Label(text="Формула")
+entr = tk.Entry()
+button = tk.Button(text="Нарисовать")
+entr.pack()
+label.pack()
+button.pack()
 
 class Function():
     def __init__(self, string):
@@ -19,34 +20,64 @@ class Function():
         self.step = 0
         self.b = 0
         self.c = 0
-        self.generate_func()
-
-    def generate_func(self):
-        strin = self.string.split()
-        a = 1
-        step = 1
-        if len(strin) == 5:
-            if strin[0][:strin[0].find('x')]:
-                a = float(strin[0][:strin[0].find('x')])
-            step = float(strin[0][strin[0].find('^') + 1:])
-            b = float(strin[1] + strin[2][:-1])
-            c = float(strin[3] + strin[4])
-        else:
-            if strin[0][:strin[0].find('x')]:
-                b = float(strin[0][:strin[0].find('x')])
-            else:
-                b = 1
-            c = float(strin[1] + strin[2])
-            a = 0
-        self.a = a
-        self.step = step
-        self.b = b
-        self.c = c
+    #     self.generate_func()
+    #
+    # def generate_func(self):
+    #     strin = self.string.split()
+    #     a = 1
+    #     step = 1
+    #     if len(strin) == 5:
+    #         if strin[0][:strin[0].find('x')]:
+    #             a = float(strin[0][:strin[0].find('x')])
+    #         step = float(strin[0][strin[0].find('^') + 1:])
+    #         b = float(strin[1] + strin[2][:-1])
+    #         c = float(strin[3] + strin[4])
+    #     else:
+    #         if strin[0][:strin[0].find('x')]:
+    #             b = float(strin[0][:strin[0].find('x')])
+    #         else:
+    #             b = 1
+    #         c = float(strin[1] + strin[2])
+    #         a = 0
+    #     self.a = a
+    #     self.step = step
+    #     self.b = b
+    #     self.c = c
 
     def get_func(self, x):
-        return (self.a * (x ** self.step)) + (self.b * x) + self.c
-    
-    def print_func(self, start=y * -1, finish=y):
+        strin = self.string.split()
+        gl_rez = 0
+        l_rez = 1
+        znak = True
+        for el in strin:
+            l_rez = 1
+            if len(el) > 1 or el == 'x' or el in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                if not znak:
+                    l_rez *= -1
+                    znak = True
+                if 'x' in el:
+                    if not '^' in el:
+                        l_rez *= x
+                    el = el.split('x')
+                    if el[0]:
+                        if el[0] == '-':
+                            l_rez *= -1
+                        else:
+                            l_rez *= float(el[0])
+                    if el[1]:
+                        l_rez *= x ** float(el[1][1:])
+                else:
+                    l_rez *= float(el)
+                gl_rez += l_rez
+            else:
+                if el == '-':
+                    znak = False
+        return gl_rez
+
+
+    def print_func(self, start=(y * -1), finish=y):
+        if '^0.' in self.string and start < 0:
+            start = 0
         clear()
         speed(10000)
         pensize(2)
@@ -71,18 +102,17 @@ class Function():
             goto(0, ycor())
         pu()
         setpos(start, y // 2)
-        results = [self.get_func(i / step) for i in range(((finish - start) // 2) * -1, (finish - start) // 2)]
-        goto(y * -1, results[0] * step)
+        results = [self.get_func(i / step) for i in range(start, finish)]
+        goto(start, results[0] * step)
         pd()
-        for i in range(finish - start - 1):
-            goto(i - y, int(results[i] * step))
-        #mainloop()
+        for i in range(start, finish):
+            goto(i, int(results[i - start] * step))
 
 
 def handle_keypress(event):
     f = Function(entr.get())
     f.print_func()
 
-window.bind("<Return>", handle_keypress)
 
-window.mainloop()
+button.bind("<Button-1>", handle_keypress)
+mainloop()
