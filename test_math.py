@@ -32,7 +32,7 @@ def gett_f(strin, x):
                         count_s -= 1
                     if count_s == 0:
                         if n != len(strin[ind_f:]) - 1:
-                            summ += (gett_f(strin[ind_f + 1:n], x) + gett_f(strin[n + 1:], x)) * l_sumh
+                            summ += (gett_f(strin[ind_f + 1:n], x) + gett_f(strin[n + 1:], x)) * l_sum
                         else:
                             summ += gett_f(strin[ind_f + 1:n], x)
                         break
