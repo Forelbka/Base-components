@@ -1,3 +1,4 @@
+from hashlib import new
 from weakref import ref
 
 
@@ -62,5 +63,24 @@ def choiseSort(lis):
                 minim = j
         lis[i], lis[minim] = lis[minim], lis[i]
     return lis
+
+def merge(lis1, lis2):
+    i1, i2 = 0, 0
+    new_lis = []
+    while i1 != len(lis1) and i2 != len(lis2):
+        if lis1[i1] < lis2[i2]:
+            new_lis.append(lis1[i1])
+            i1 += 1
+        else:
+            new_lis.append(lis2[i2])
+            i2 += 1
+    if i1 == len(lis1):
+        return new_lis + lis2[i2:]
+    return new_lis + lis1[i1:]
+
+def mergeSort(lis):
+    if len(lis) <= 1:
+        return lis
+    return merge(mergeSort(lis[:len(lis) // 2]), mergeSort(lis[len(lis) // 2:]))
 
 print(choiseSort([1, -10]))
