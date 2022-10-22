@@ -31,27 +31,56 @@ def test_sort(func, repeats=10, lens=[1000]):
         print('Крупные тесты не верны')
 
 # Функция сортировки
-def merge(lis1, lis2):
-    i1, i2 = 0, 0
-    new_lis = []
-    while i1 != len(lis1) and i2 != len(lis2):
-        if lis1[i1] < lis2[i2]:
-            new_lis.append(lis1[i1])
-            i1 += 1
-        else:
-            new_lis.append(lis2[i2])
-            i2 += 1
-    if i1 == len(lis1):
-        return new_lis + lis2[i2:]
-    return new_lis + lis1[i1:]
+class heap():
+    def __init__(self, lis=[]):
+        self.lis = []
+        if lis:
+            for el in lis:
+                self.insert(el)
+    def siftUp(self, i=None):
+        if i is None:
+            i = len(self.lis) - 1
+        p = (i - 1) // 2
+        lis = self.lis
+        while i > 0 and lis[p] > lis[i]:
+            lis[p], lis[i] = lis[i], lis[p]
+            i = p
+            p = (i - 1) // 2
+        self.lis = lis
+    def siftDoun(self, i=0):
+        l = i * 2 + 1
+        r = i * 2 + 2
+        lis = self.lis
+        p = i
+        while True:
+            if l < len(lis) and lis[p] > lis[l]:
+                p = l
+            if r < len(lis) and lis[p] > lis[r]:
+                p = r
+            if i == p:
+                break
+            lis[i], lis[p] = lis[p], lis[i]
+            i = p
+            l = i * 2 + 1
+            r = i * 2 + 2
+        self.lis = lis
+    def insert(self, el):
+        self.lis.append(el)
+        self.siftUp()
+    def getMin(self):
+        lis = self.lis
+        minn = lis[0]
+        lis[0], lis[-1] = lis[-1], lis[0]
+        lis.pop()
+        self.lis = lis
+        self.siftDoun()
+        return minn
 
-def mergeSort(lis):
-    if len(lis) <= 1:
-        return lis
-    return merge(mergeSort(lis[:len(lis) // 2]), mergeSort(lis[len(lis) // 2:]))
-    return lis
+def heapSort(lis):
+    heap_ = heap(lis)
+    return [heap_.getMin() for _ in range(len(lis))]
 # Функция сортировки
 
 # test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
 
-test_sort(mergeSort, repeats=10, lens=[1000])
+test_sort(heapSort, repeats=5, lens=[10])
