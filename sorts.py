@@ -83,4 +83,52 @@ def mergeSort(lis):
         return lis
     return merge(mergeSort(lis[:len(lis) // 2]), mergeSort(lis[len(lis) // 2:]))
 
-print(choiseSort([1, -10]))
+class heap():
+    def __init__(self, lis=[]):
+        self.lis = []
+        if lis:
+            for el in lis:
+                self.insert(el)
+    def siftUp(self, i=None):
+        if i is None:
+            i = len(self.lis) - 1
+        p = (i - 1) // 2
+        lis = self.lis
+        while i > 0 and lis[p] > lis[i]:
+            lis[p], lis[i] = lis[i], lis[p]
+            i = p
+            p = (i - 1) // 2
+        self.lis = lis
+    def siftDoun(self, i=0):
+        l = i * 2 + 1
+        r = i * 2 + 2
+        lis = self.lis
+        p = i
+        while True:
+            if l < len(lis) and lis[p] > lis[l]:
+                p = l
+            if r < len(lis) and lis[p] > lis[r]:
+                p = r
+            if i == p:
+                break
+            lis[i], lis[p] = lis[p], lis[i]
+            i = p
+            l = i * 2 + 1
+            r = i * 2 + 2
+        self.lis = lis
+    def insert(self, el):
+        self.lis.append(el)
+        self.siftUp()
+    def getMin(self):
+        lis = self.lis
+        minn = lis[0]
+        lis[0], lis[-1] = lis[-1], lis[0]
+        lis.pop()
+        self.lis = lis
+        self.siftDoun()
+        return minn
+
+def heapSort(lis):
+    heap_ = heap(lis)
+    return [heap_.getMin() for _ in range(len(lis))]
+
