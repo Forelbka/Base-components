@@ -31,16 +31,27 @@ def test_sort(func, repeats=10, lens=[1000]):
         print('Крупные тесты не верны')
 
 # Функция сортировки
-def choiseSort(lis):
-    for i in range(len(lis)):
-        minim = i
-        for j in range(i, len(lis)):
-            if lis[j] < lis[minim]:
-                minim = j
-        lis[i], lis[minim] = lis[minim], lis[i]
+def merge(lis1, lis2):
+    i1, i2 = 0, 0
+    new_lis = []
+    while i1 != len(lis1) and i2 != len(lis2):
+        if lis1[i1] < lis2[i2]:
+            new_lis.append(lis1[i1])
+            i1 += 1
+        else:
+            new_lis.append(lis2[i2])
+            i2 += 1
+    if i1 == len(lis1):
+        return new_lis + lis2[i2:]
+    return new_lis + lis1[i1:]
+
+def mergeSort(lis):
+    if len(lis) <= 1:
+        return lis
+    return merge(mergeSort(lis[:len(lis) // 2]), mergeSort(lis[len(lis) // 2:]))
     return lis
 # Функция сортировки
 
 # test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
 
-test_sort(choiseSort, repeats=10, lens=[1000])
+test_sort(mergeSort, repeats=10, lens=[1000])
