@@ -1,8 +1,5 @@
-from audioop import reverse
 import random
 import datetime
-from turtle import speed
-from sorts import insertsort
 import time
 
 def test_sort(funcs, repeats=10, lens=[1000], mode='accuracy'):
@@ -42,13 +39,13 @@ def test_sort(funcs, repeats=10, lens=[1000], mode='accuracy'):
                 times[nn].append([tipe_])
                 if tipe_ == 'sorted':
                     for _ in range(repeats):
-                        lis = sorted([random.randint(-10000, 10000) for __ in range(1000)])
+                        lis = sorted([random.randint(-10000, 10000) for __ in range(10000)])
                         now = time.time()
                         func(lis)
                         times[nn][n + 1].append(time.time() - now)
                 elif tipe_ == 'revers':
                     for _ in range(repeats):
-                        lis = sorted([random.randint(-10000, 10000) for __ in range(10000)], reverse=True)
+                        lis = sorted([random.randint(-10000, 10000) for __ in range(500000)], reverse=True)
                         now = time.time()
                         func(lis)
                         times[nn][n + 1].append(time.time() - now)
@@ -96,8 +93,80 @@ def mergeSort(lis):
     if len(lis) <= 1:
         return lis
     return merge(mergeSort(lis[:len(lis) // 2]), mergeSort(lis[len(lis) // 2:]))
+
+def choiseSort(lis):
+    for i in range(len(lis)):
+        minim = i
+        for j in range(i, len(lis)):
+            if lis[j] < lis[minim]:
+                minim = j
+        lis[i], lis[minim] = lis[minim], lis[i]
+    return lis
+
+class heap():
+    def __init__(self, lis=[]):
+        self.lis = []
+        if lis:
+            for el in lis:
+                self.insert(el)
+    def siftUp(self, i=None):
+        if i is None:
+            i = len(self.lis) - 1
+        p = (i - 1) // 2
+        lis = self.lis
+        while i > 0 and lis[p] > lis[i]:
+            lis[p], lis[i] = lis[i], lis[p]
+            i = p
+            p = (i - 1) // 2
+        self.lis = lis
+    def siftDoun(self, i=0):
+        l = i * 2 + 1
+        r = i * 2 + 2
+        lis = self.lis
+        p = i
+        while True:
+            if l < len(lis) and lis[p] > lis[l]:
+                p = l
+            if r < len(lis) and lis[p] > lis[r]:
+                p = r
+            if i == p:
+                break
+            lis[i], lis[p] = lis[p], lis[i]
+            i = p
+            l = i * 2 + 1
+            r = i * 2 + 2
+        self.lis = lis
+    def insert(self, el):
+        self.lis.append(el)
+        self.siftUp()
+    def getMin(self):
+        lis = self.lis
+        minn = lis[0]
+        lis[0], lis[-1] = lis[-1], lis[0]
+        lis.pop()
+        self.lis = lis
+        self.siftDoun()
+        return minn
+
+def heapSort(lis):
+    heap_ = heap(lis)
+    return [heap_.getMin() for _ in range(len(lis))]
+
+def insertsort(lis):
+    if len(lis) < 2:
+        return(lis)
+    new_list = [lis[0]]
+    for el in lis[1:]:
+        for i in range(len(new_list)):
+            if el <= new_list[i]:
+                new_list.insert(i, el)
+                break
+            elif i == len(new_list) - 1:
+                new_list.append(el)
+    return new_list
 # Функция сортировки
 
 # test_sort(функция без скобок, repeats=кол-во повторов больших тестов, lens=[список из возможных длинн тестовых списков])
 
-test_sort([fastsort, mergeSort], repeats=1, lens=[10], mode='speed')
+print(1)
+test_sort([fastsort, choiseSort], repeats=10, lens=[10], mode='speed')

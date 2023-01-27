@@ -31,6 +31,27 @@ def get_f(strin, x):
         l_rez *= float(strin)
     return l_rez
 
+def bracket_split(strin):
+    ret_lis = []
+    tec_el = ''
+    brac_count = 0
+    for el in strin:
+        if el == ' ' and brac_count == 0:
+            if tec_el:
+                ret_lis.append(tec_el)
+                tec_el = ''
+        elif el == '(':
+            brac_count += 1
+            tec_el += el
+        elif el == ')':
+            brac_count -= 1
+            tec_el += el
+        else:
+            tec_el += el
+    if tec_el:
+        ret_lis.append(tec_el)
+    return ret_lis
+    
 class Function():
     def __init__(self, string):
         self.string = string
@@ -44,42 +65,47 @@ class Function():
         znak = 1
         summ = 0
         l_sum = 1
-        if '(' in strin or ')' in strin:
-                    count_s = 0
-                    ind_f = 0
-                    if strin[0] != '(':
-                        l_sum *= get_f(strin[:strin.find('(')], x)
-                        ind_f = strin.find('(')
-                    for n, zn in enumerate(strin[ind_f:]):
-                        if zn == '(':
-                            count_s += 1
-                        elif zn == ')':
-                            count_s -= 1
-                        if count_s == 0:
-                            ferst_f = Function(strin[ind_f + 1:n])
-                            sec_f = Function(strin[n + 1:])
-                            if n != len(strin) and strin[n + 1:]:
-                                summ += ferst_f.get_func(x) + sec_f.get_func(x) * l_sum
-                            else:
-                                summ += ferst_f.get_func(x)
-                            break
-        else:
-            strin = strin.split()
-            for el in strin:
-                if len(el) > 1 or el == 'x' or el in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-                    if '/' in el:
-                        n = el.find('/')
-                        if get_f(el[n + 1:], x) == 0:
-                            return None
+
+        lis = bracket_split(strin)
+        print(lis)
+        for e in lis:
+            if '(' in e:
+                count_s = 0
+                ind_f = 0
+                if e[0] != '(':
+                    print(e)
+                    l_sum *= get_f(e[:e.find('(')], x)
+                    ind_f = e.find('(')
+                for n, zn in enumerate(e[ind_f:]):
+                    if zn == '(':
+                        count_s += 1
+                    elif zn == ')':
+                        count_s -= 1
+                    if count_s == 0:
+                        ferst_f = Function(e[ind_f + 1 : n])
+                        sec_f = Function(e[n + 1:])
+                        if n != len(e) and e[n + 1:]:
+                            summ += ferst_f.get_func(x) + sec_f.get_func(x) * l_sum
                         else:
-                            summ += (get_f(el[:n], x) / get_f(el[n + 1:], x)) * znak
+                            summ += ferst_f.get_func(x)
+                        break
+            else:
+                e = e.split()
+                for el in e:
+                    if len(el) > 1 or el == 'x' or el in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                        if '/' in el:
+                            n = el.find('/')
+                            if get_f(el[n + 1:], x) == 0:
+                                return None
+                            else:
+                                summ += (get_f(el[:n], x) / get_f(el[n + 1:], x)) * znak
+                                znak = 1
+                        else:
+                            summ += get_f(el, x) * znak
                             znak = 1
                     else:
-                        summ += get_f(el, x) * znak
-                        znak = 1
-                else:
-                    if el == '-':
-                        znak = -1
+                        if el == '-':
+                            znak = -1
         return summ
 
 
@@ -87,7 +113,9 @@ class Function():
         if '^0.' in self.string and start < 0:
             start = 0
         clear()
+        pu()
         home()
+        pd()
         speed(10000)
         pensize(2)
         step = (y * 2) // 10
@@ -132,8 +160,5 @@ def handle_keypress(event):
 
 
 button.bind("<Button-1>", handle_keypress)
-
-fu = Function('x + 1')
-print(fu.get_func(10))
 
 mainloop()
