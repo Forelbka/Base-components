@@ -11,7 +11,7 @@ signs = {
 
 def f(func, values):
 
-    variables = sorted(list(set([el for el in func if el not in signs.values()])))
+    variables = sorted(list(set([el for el in func if el not in signs.keys() and el != '¯'])))
 
     for i, val in enumerate(values):
         func = func.replace(variables[i], str(val))
@@ -20,28 +20,35 @@ def f(func, values):
         func = func.replace(l1, l2)
     return func
 
-def getf(func, values):
+def getf(func):
     func = str(func)
-    while set(func) | set(signs.values()):
+    # func = ' ' + ' '.join(func.split()) + ' '
+    while set(func.split()) & set(map(lambda x: str(x.split()[0]) , signs.values())):
         if '(' in func:
             br_f = func.find('(')
             br_l = len(func) - func[::-1].find(')')
-            func = func[:br_f] + getf(func[br_f: br_l], values) + func[br_l:]
+            func = func[:br_f] + getf(func[br_f + 1: br_l - 1]) + func[br_l:]
         elif 'not' in func:
             ind = func.find('not')
-            func = func[:ind] + str(int(not(func[ind + 4]))) + func[:ind + 5]
-        elif '*' in func:
-            ind = func.find('*')
-            func = func[:ind - 2] + str(int(func[ind - 2] and func[ind + 2])) + func[ind + 3:]
-        elif '+' in func:
-            ind = func.find('+')
-            func = func[:ind - 2] + str(int(func[ind - 2] or func[ind + 2])) + func[ind + 3:]
+            func = func[:ind] + str(int(not(int(func[ind + 4])))) + func[ind + 5:]
         elif '<=' in func:
             ind = func.find('→')
-            func = func[:ind - 2] + str(int(not(func[ind - 2]) or func[ind + 2])) + func[ind + 3:]
-        func = ' ' + ' '.join(func.split()) + ' '
+            func = not getf(func[:ind - 1]) or getf(func[ind + 2:])
+        elif '+' in func:
+            ind = func.find('+')
+            f1 = int(getf(func[:ind - 1]))
+            f2 = int(getf(func[ind + 2:]))
+            func = str(f1 or f2)
+        elif '*' in func:
+            ind = func.find('*')
+            f1 = int(getf(func[:ind - 1]))
+            f2 = int(getf(func[ind + 2:]))
+            func = str(f1 and f2)
     return func
+ 
+'A∧(C∨¯¯¯B)∧¯¯¯C'
 
-fu = f('A∧C∨¯¯¯A∧¯¯¯C', (0, 1, 0))
+fu = f('A∧(C∨¯¯¯B)∧¯¯¯C', [0, 0, 0])
 print(fu)
-print(getf(fu, (0, 1, 0)))
+print('////')
+print(getf(fu))
