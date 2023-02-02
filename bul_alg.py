@@ -33,7 +33,9 @@ def getf(func):
             func = func[:ind] + str(int(not(int(func[ind + 4])))) + func[ind + 5:]
         elif '<=' in func:
             ind = func.find('→')
-            func = not getf(func[:ind - 1]) or getf(func[ind + 2:])
+            f1 = int(getf(func[:ind - 1]))
+            f2 = int(getf(func[ind + 2:]))
+            func = not f1 or f2
         elif '+' in func:
             ind = func.find('+')
             f1 = int(getf(func[:ind - 1]))
@@ -46,9 +48,12 @@ def getf(func):
             func = str(f1 and f2)
     return func
  
-'A∧(C∨¯¯¯B)∧¯¯¯C'
+st = 'A∧(C∨¯¯¯B)∧¯¯¯C'
 
-fu = f('A∧(C∨¯¯¯B)∧¯¯¯C', [0, 0, 0])
-print(fu)
-print('////')
-print(getf(fu))
+
+print(*sorted(list(set([el for el in st if el not in signs.keys() and el != '¯']))), 'F', sep='  ')
+print()
+
+for v in product((0, 1), repeat=len(list(set([el for el in st if el not in signs.keys() and el != '¯'])))):
+    fu = f(st, v)
+    print(*v, getf(fu), sep='  ')
