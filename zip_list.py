@@ -1,6 +1,26 @@
 import random
 import sys
 
+# Create a a list compression function
+def compress(lst):
+    # Create a new list
+    compressed_list = []
+    # Loop through the list
+    for i in range(len(lst)):
+        # If the next item is the same as the current item
+        if i != len(lst) - 1 and lst[i] == lst[i + 1]:
+            # Add the current item to the compressed list
+            compressed_list.append(lst[i])
+        else:
+            # Add the current item to the compressed list
+            compressed_list.append(lst[i])
+            # Add a new item to the compressed list
+            compressed_list.append(1)
+    # Return the compressed list
+    return compressed_list
+
+
+
 class ziplist:
     def __init__(self, lis):
         self.lis = lis
