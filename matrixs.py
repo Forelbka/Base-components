@@ -2,6 +2,32 @@ class matrix():
     def __init__(self, m) -> None:
         self.matr = m
     
+    def transpon(self):
+        return [[self.matr[j][i] for j in range(len(self.matr))] for i in range(len(self.matr[0]))]
+    
+    def determinant(self):
+        matr = self.matr
+        if len(matr) != len(matr[0]):
+            return 'Error'
+        if len(matr) == 2:
+            return matr[0][0] * matr[1][1] - matr[0][1] * matr[1][0]
+        det = 0
+        for i in range(len(matr)):
+            det += ((-1) ** i) * matrix([el[:-1] for n, el in enumerate(matr) if n != i]).determinant() * matr[i][-1]
+        return det * ((-1) ** (len(matr) - 1))
+    
+    def kramer(self, free):
+        matr = self.matr
+        det = self.determinant()
+        if det == 0:
+            return 'No consistent solution'
+        ret = []
+        for i in range(len(matr)):
+            new_matrix = self.transpon()
+            new_matrix[i] = free
+            new_matrix = matrix(new_matrix).transpon()
+            ret.append(matrix(new_matrix).determinant() // det)
+        return ' '.join(map(str, ret))
     def __add__(self, other):
         m1 = self.matr
         m2 = other.matr
@@ -74,15 +100,14 @@ class matrix():
         self.matr[key] = el
 
 tes1 = matrix([
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
+    [3, -3, -5, 8],
+    [-3, -5, -7, 5],
+    [2, -5, -7, 7],
+    [-4, 3, 5, -6]
 ])
 
-tes2 = matrix([
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-])
+tes2 = matrix([list(map(int, input().split())) for _ in range(int(input()))])
 
-print(tes1[1])
+
+
+print(tes2.determinant())
