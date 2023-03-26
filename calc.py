@@ -32,9 +32,13 @@ def evaluate_expression(exp):
     if exp == '':
         return 0
     
-    if '𝝅' in exp:
+    while '𝝅' in exp:
         i = exp.index('𝝅')
         exp = exp[:i] + str(pi) + exp[i + 1:]
+    
+    # while 'l' in exp:
+    #     i = exp.index('l') + 1
+
     
     
     signs = ['+', '-', '/', '^', '*']
@@ -65,6 +69,10 @@ def evaluate_expression(exp):
                 sep_exp.append(exp[i])
             else:
                 sep_exp[-1] += exp[i]
+    
+    for i, el in enumerate(sep_exp):
+        if 'l' in el:
+            sep_exp[i] = str(log2(float(evaluate_expression(el[2: -1]))))
         
     for i, el in enumerate(sep_exp):
         if '(' in el:
@@ -126,12 +134,14 @@ for i in range(2, 8):
 entr = tk.Entry(width=67)
 entr.grid(row=0, column=0, columnspan=4)
 
-res = tk.Label(width=50, height=4, text='Res')
+res = tk.Label(width=50, height=4, text='')
 res.grid(row=1, column=0, columnspan=4)
 
-tk.Button(width=13, height=4,text='>', command=lambda: entr.delete(len(entr.get()) - 1, tk.END)).grid(row=2, column=2)
+tk.Button(width=13, height=4,text='<', command=lambda: entr.delete(len(entr.get()) - 1, tk.END)).grid(row=2, column=2)
 tk.Button(width=13, height=4,text='C', command=lambda: entr.delete(0, tk.END)).grid(row=2, column=3)
 tk.Button(width=13, height=4,text='=', command=lambda: res.config(text=evaluate_expression(entr.get()))).grid(row=7, column=3)
 tk.Button(width=13, height=4,text='log', command=lambda: entr.insert(tk.END, 'l(')).grid(row=2, column=0)
+
+
 
 window.mainloop()
