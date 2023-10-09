@@ -1,5 +1,3 @@
-import datetime
-
 def timer(func):
     """
     Decorator function that times the execution of the input function.
@@ -17,6 +15,7 @@ def timer(func):
 
     return wrapper
 
+
 def debug(func):
     """
     A decorator function that returns a wrapper function which calls the input `func` with the given `args` and `kwargs`. 
@@ -26,6 +25,8 @@ def debug(func):
     """
 
     import time
+    import traceback
+
     def wrapper(*args, **kwargs):
         try:
             start = time.time()
@@ -34,7 +35,7 @@ def debug(func):
             print('////////////////////////////')
 
         except Exception as e:
-            print(f'Function {func.__name__} was called  taking up {time.time() - start} seconds with {args} and {kwargs} and crashed with: {e}')
+            print(f'Function {func.__name__} was called  taking up {time.time() - start} seconds with {args} and {kwargs} and crashed with: {traceback.format_exc()}')
             print('////////////////////////////')
     
     return wrapper
@@ -49,6 +50,8 @@ def logs(func):
     """
 
     import time
+    import traceback
+
     def wrapper(*args, **kwargs):
         with open('log.txt', 'a') as f:
             try:
@@ -60,12 +63,5 @@ def logs(func):
                 start = time.time()
                 ret = func(*args, **kwargs)
                 print('////////////////////////////', file=f)
-                print(f'Function {func.__name__} was called taking up {time.time() - start} with {args} and {kwargs} and crashed with: {e}', file=f)
+                print(f'Function {func.__name__} was called taking up {time.time() - start} with {args} and {kwargs} and crashed with: {traceback.format_exc()}', file=f)
     return wrapper
-
-@logs
-def bs():
-    return [i for i in range(10)]
-
-
-print(bs())
