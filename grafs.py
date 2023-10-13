@@ -24,7 +24,7 @@ class Graf():
                     ret_matrix[i][j] = '*'
         return ret_matrix
     
-    def adj_matrix_to_adj_list(matrix):
+    def adj_matrix_to_adj_list(matrix: list):
         """
         Generates a dictionary representation of an adjacency list from an adjacency matrix.
 
@@ -69,21 +69,31 @@ class Graf():
             cur_node = min(adj_list[cur_node].keys() - set(visited), key=lambda x: ret_dict[x])
         return ret_dict
     
-    def dfs(self, start: str, target: str) -> dict:
+    def dfs(self, start: str, target: str) -> list:
         """
-        Depth-first search algorithm to find a path from a start node to a target node.
-
+        Performs a depth-first search (DFS) on the graph starting from the given `start` node and searching for the `target` node.
+        
         Parameters:
-            start (str): The start node.
-            target (str): The target node.
-
+            start (str): The starting node for the DFS traversal.
+            target (str): The target node that we are searching for.
+        
         Returns:
-            dict: A dictionary representing the path from the start node to the target node.
-                  The keys are the nodes in the path, and the values are the previous nodes in the path.
-                  If no path is found, returns None.
+            list: The path from the `start` node to the `target` node, if it exists. Otherwise, an empty list is returned.
         """
+        
         adj_list = self.adj_list
-        def dfs_helper(node, target, visited):
+        def dfs_helper(node: str, target: str, visited: list) -> list:
+            """
+            Perform a depth-first search (DFS) starting from the given node to find a path to the target node.
+
+            Args:
+                node (str): The starting node for the DFS.
+                target (str): The target node to find a path to.
+                visited (list): A list of nodes that have already been visited during the DFS.
+
+            Returns:
+                list: A list of nodes representing the path from the starting node to the target node. If no path is found, an empty list is returned.
+            """
             visited.append(node)
             if node == target:
                 return [node]
@@ -92,11 +102,21 @@ class Graf():
                     ret = dfs_helper(cur_node, target, visited)
                     if ret:
                         return ret + [node]
-                return None
+                return []
         visited = []
         return dfs_helper(start, target, visited)
     
-    def bfs(self, start: str, target: str) -> dict:
+    def bfs(self, start: str, target: str) -> bool:
+        """
+        Performs a breadth-first search (BFS) on a graph starting from a given node and checks if a target node is reachable.
+
+        Parameters:
+            start (str): The starting node for the BFS.
+            target (str): The target node to be reached.
+
+        Returns:
+            bool: True if the target node is reachable from the starting node, False otherwise.
+        """
         queue = [start]
         visited = []
         while queue:
