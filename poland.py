@@ -14,7 +14,7 @@ def poland_to_normal(string):
                 ret.append(ret.pop(-1) - ret.pop(-1))
     return ret[-1]
 
-def check_stack(stack_):
+def check_stack(stack_: list) -> int:
     if not stack_:
         return 0
     if stack_[-1] == '(':
@@ -23,6 +23,7 @@ def check_stack(stack_):
         return 2
     if stack_[-1] == '*' or stack_[-1] == '/':
         return 3
+    return 0
 
 def normal_to_poland(string):
     ret = []
