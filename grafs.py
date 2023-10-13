@@ -45,6 +45,15 @@ class Graf():
         return Graf(adj_list)
 
     def dijkstras(self, start: str) -> dict:
+        """
+        Calculates the shortest path from a given start node to all other nodes using Dijkstra's algorithm.
+
+        Parameters:
+            start (str): The start node.
+
+        Returns:
+            dict: A dictionary mapping each node to its shortest distance from the start node.
+        """
         adj_list = self.adj_list
         ret_dict = {start: 0, **{key: float('inf') for key in adj_list}}
         ret_dict[start] = 0
@@ -55,9 +64,49 @@ class Graf():
                 if ret_dict[next_node] > ret_dict[cur_node] + adj_list[cur_node][next_node]:
                     ret_dict[next_node] = ret_dict[cur_node] + adj_list[cur_node][next_node]
             visited.append(cur_node)
-            cur_node = min(ret_dict, key=lambda x: ret_dict[x])
+            if len(visited) == len(adj_list):
+                break
+            cur_node = min(adj_list[cur_node].keys() - set(visited), key=lambda x: ret_dict[x])
         return ret_dict
-        
+    
+    def dfs(self, start: str, target: str) -> dict:
+        """
+        Depth-first search algorithm to find a path from a start node to a target node.
+
+        Parameters:
+            start (str): The start node.
+            target (str): The target node.
+
+        Returns:
+            dict: A dictionary representing the path from the start node to the target node.
+                  The keys are the nodes in the path, and the values are the previous nodes in the path.
+                  If no path is found, returns None.
+        """
+        adj_list = self.adj_list
+        def dfs_helper(node, target, visited):
+            visited.append(node)
+            if node == target:
+                return [node]
+            else:
+                for cur_node in adj_list[node].keys() - visited:
+                    ret = dfs_helper(cur_node, target, visited)
+                    if ret:
+                        return ret + [node]
+                return None
+        visited = []
+        return dfs_helper(start, target, visited)
+    
+    def bfs(self, start: str, target: str) -> dict:
+        queue = [start]
+        visited = []
+        while queue:
+            cur_node = queue.pop(0)
+            visited.append(cur_node)
+            if cur_node == target:
+                return True
+            for next_node in self.adj_list[cur_node].keys() - visited:
+                queue.append(next_node)
+        return False
 
     def __repr__(self) -> str:
         """
@@ -79,10 +128,14 @@ class Graf():
 
 g = Graf(
     {
-        'A': {'B': 1, 'C': 2, 'D': 5,},
-        'B': {'A': 1, 'C': 3,},
-        'C': {'A': 2, 'B': 3, 'D': 1},
-        'D': {'A': 5, 'C': 1},
+        'A': {'B': 1, 'C': 2},
+        'B': {"A": 1, 'D': 3, 'E': 4},
+        'C': {'A': 2, 'D': 1, 'J': 3},
+        'D': {'B': 3, 'C': 1, 'F': 7},
+        'E': {'B': 4, 'F': 1, 'I': 2},
+        'F': {'D': 7, 'E': 1, 'J': 3, 'I': 8},
+        'J': {'C': 3, 'F': 3, 'I': 1},
+        'I': {'E': 2, 'F': 8, 'J': 1},
     }
 )
 
@@ -97,4 +150,4 @@ g = Graf(
 # )
 
 # print('\n'.join(map(lambda x: ' '.join(map(str, x)), g.adj_matrix())))
-print(g.dijkstras('A'))
+print(g.bfs('A', 'I'))
