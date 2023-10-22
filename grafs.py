@@ -146,18 +146,18 @@ class Graf():
         """
         return str(self.adj_list)
 
-g = Graf(
-    {
-        'A': {'B': 1, 'C': 2},
-        'B': {"A": 1, 'D': 3, 'E': 4},
-        'C': {'A': 2, 'D': 1, 'J': 3},
-        'D': {'B': 3, 'C': 1, 'F': 7},
-        'E': {'B': 4, 'F': 1, 'I': 2},
-        'F': {'D': 7, 'E': 1, 'J': 3, 'I': 8},
-        'J': {'C': 3, 'F': 3, 'I': 1},
-        'I': {'E': 2, 'F': 8, 'J': 1},
-    }
-)
+# g = Graf(
+#     {
+#         'A': {'B': 1, 'C': 2},
+#         'B': {"A": 1, 'D': 3, 'E': 4},
+#         'C': {'A': 2, 'D': 1, 'J': 3},
+#         'D': {'B': 3, 'C': 1, 'F': 7},
+#         'E': {'B': 4, 'F': 1, 'I': 2},
+#         'F': {'D': 7, 'E': 1, 'J': 3, 'I': 8},
+#         'J': {'C': 3, 'F': 3, 'I': 1},
+#         'I': {'E': 2, 'F': 8, 'J': 1},
+#     }
+# )
 
 # g = Graf.adj_matrix_to_adj_list(
 #     [
@@ -170,4 +170,38 @@ g = Graf(
 # )
 
 # print('\n'.join(map(lambda x: ' '.join(map(str, x)), g.adj_matrix())))
-print(g.bfs('A', 'I'))
+# print(g.bfs('A', 'I'))
+
+import unittest
+
+class TestDijkstras(unittest.TestCase):
+
+    def setUp(self):
+        # Initialize the graph
+        self.graph = Graf({
+            'A': {'B': 5, 'C': 3},
+            'B': {'A': 5, 'C': 2, 'D': 6},
+            'C': {'A': 3, 'B': 2, 'D': 7},
+            'D': {'B': 6, 'C': 7}
+        })
+        # Define the adjacency list
+
+    def test_shortest_path(self):
+        # Test the shortest path from 'A' to all other nodes
+        result = self.graph.dijkstras('A')
+        self.assertEqual(result, {'A': 0, 'B': 5, 'C': 3, 'D': 10})
+
+        # Test the shortest path from 'B' to all other nodes
+        result = self.graph.dijkstras('B')
+        self.assertEqual(result, {'A': 5, 'B': 0, 'C': 2, 'D': 6})
+
+        # Test the shortest path from 'C' to all other nodes
+        result = self.graph.dijkstras('C')
+        self.assertEqual(result, {'A': 3, 'B': 2, 'C': 0, 'D': 7})
+
+        # Test the shortest path from 'D' to all other nodes
+        result = self.graph.dijkstras('D')
+        self.assertEqual(result, {'A': float('inf'), 'B': 6, 'C': 7, 'D': 0})
+
+if __name__ == '__main__':
+    unittest.main()
